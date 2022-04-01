@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>我的发布</title>
+    <base href="http://localhost:8080/">
+    <!--    引入jQuery-->
+    <script type="text/javascript" src="static/js/jquery-1.12.4.min.js"></script>
+    <!--    引入bootstrap框架-->
+    <script type="text/javascript" src="static/bootstrap/js/bootstrap.min.js"></script>
+    <!--    引入bootstrap的css样式-->
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <!--    引入vue.js-->
+    <script type="text/javascript" src="static/script/vue.js"></script>
+</head>
+<body>
+
+<!--导航栏-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <nav class="navbar navbar-inverse">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                                data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/mine">Your乐</a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a href="/whoSeeMe">谁看过我</a></li>
+                            <li class="active"><a href="/mySend">我的发布</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-haspopup="true" aria-expanded="false">反馈 <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/yellowFan">黄反</a></li>
+                                    <li><a href="/blackFan">黑反</a></li>
+                                    <li><a href="/bodySet">页面布局</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="/bugFan">BUG反馈</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="/elseFan">其它</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <form class="navbar-form navbar-left">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="搜索动态类型" value="" name="searchMsg"
+                                       id="search_input">
+                            </div>
+                            <button type="button" class="btn btn-default" id="search_btn" onclick="searchMessege()">搜索
+                            </button>
+                        </form>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/sendComments">状态发布</a></li>
+                            <li><a href="/friend">邀请好友</a></li>
+                            <li><a href="/hasName">实名认证</a></li>
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!--    动态展示发布的帖子（用vue实现）-->
+    <div class="row" id="mySendComments_body">
+        <div class="col-sm-6 col-md-4" v-for="myComments in myCommentsList">
+            <div class="thumbnail">
+                <div class="media-body" id="author_msg">
+                    <a v-bind:href="myComments.userRegisters.avatar">
+                        <img v-bind:src="myComments.userRegisters.avatar" width="30px" height="30px">
+                    </a>
+                    <font color="#191970" size="3px">
+                        {{myComments.userRegisters.nickName}}
+                    </font>
+                    <p>发表于{{myComments.updateTime}}</p>
+                </div>
+                <a v-bind:href="myComments.cover">
+                    <img v-bind:src="myComments.cover" alt="文章作者没有上传任何图片" style="width: 658px; height: 110px;">
+                </a>
+                <div class="caption">
+                    <h3>{{myComments.type}}</h3>
+                    <p>{{myComments.comment}}</p>
+                    <p><a v-bind:href="myComments.url" class="btn btn-primary" role="button" id="show_messege">详情</a> <a
+                            href="" class="btn btn-default" role="button" onclick="toShare()">分享</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="js/mySend.js"></script>
+<script type="text/javascript" src="js/button.js"></script>
+
+</body>
+</html>

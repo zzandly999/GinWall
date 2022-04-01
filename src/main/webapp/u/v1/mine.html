@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml"
+      xmlns:v-if="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>我的主页</title>
+    <base href="http://localhost:8080/">
+    <!--    引入jQuery-->
+    <script type="text/javascript" src="static/js/jquery-1.12.4.min.js"></script>
+    <!--    引入bootstrap框架-->
+    <script type="text/javascript" src="static/bootstrap/js/bootstrap.min.js"></script>
+    <!--    引入bootstrap的css样式-->
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <!--    引入vue.js-->
+    <script type="text/javascript" src="static/script/vue.js"></script>
+    <style>
+        #author_msg {
+            font-family: 微软雅黑;
+        }
+        a:link{text-decoration:none; }  /* 指正常的未被访问过的链接*/
+
+        a:visited{text-decoration:none; }/*指已经访问过的链接*/
+
+        a:hover{text-decoration:none;}/*指鼠标在链接*/
+
+        a:active{text-decoration:none;}/* 指正在点的链接*/
+
+    </style>
+</head>
+<body>
+
+<!--导航栏-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <nav class="navbar navbar-inverse">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                                data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/mine">Your乐</a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a href="/whoSeeMe">谁看过我</a></li>
+                            <li><a href="/toMySend">我的发布</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-haspopup="true" aria-expanded="false">反馈 <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/yellowFan">黄反</a></li>
+                                    <li><a href="/blackFan">黑反</a></li>
+                                    <li><a href="/bodySet">页面布局</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="/bugFan">BUG反馈</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="/elseFan">其它</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <form class="navbar-form navbar-left">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="请输入..." value="" name="searchMsg"
+                                       id="search_input">
+                            </div>
+                            <button type="button" class="btn btn-default" id="search_btn" onclick="searchDyType()" id="searchType">搜索
+                            </button>
+                        </form>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/sendComments">状态发布</a></li>
+                            <li><a href="/friend">邀请好友</a></li>
+                            <li><a href="/hasName">实名认证</a></li>
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
+            </nav>
+        </div>
+    </div>
+
+<!--    轮播图-->
+    <div class="row">
+        <div class="col-md-12">
+            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                </ol>
+
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" role="listbox">
+                    <div class="item active">
+                        <img src="/images/kh.jpg" alt="...">
+                        <div class="carousel-caption">
+
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="/images/qb.jpg" alt="...">
+                        <div class="carousel-caption">
+
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="/images/pz.jpg" alt="...">
+                        <div class="carousel-caption">
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Controls -->
+                <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <p></p>
+<!--    动态展示发布的帖子（用vue实现）-->
+    <div class="row" id="comments_body">
+        <div class="col-sm-6 col-md-4" v-for="comments in commentsList">
+            <div class="thumbnail" id="who">
+                <div class="media-body">
+                    <img v-bind:src="comments.userRegisters.avatar" width="30px" height="30px">
+                    <font color="#191970" size="3px">
+                        <a @click="who(comments.userRegisters.nickName)">{{comments.userRegisters.nickName}}</a>
+                    </font>
+                    <p>发表于{{comments.updateTime}}</p>
+                </div>
+                <a v-bind:href="comments.cover" v-if="comments.cover != '/images/images'">
+                    <img v-bind:src="comments.cover" alt="文章作者没有上传任何图片" style="width: 658px; height: 110px;">
+                </a>
+                <div v-if="comments.cover == '/images/images'">
+                    <img v-bind:src="comments.cover" alt="文章作者没有上传任何图片" style="width: 658px; height: 110px;">
+                </div>
+                <div class="caption">
+                    <h3>{{comments.type}}</h3>
+                    <p>{{comments.comment}}</p>
+                    <p> <a class="btn btn-primary" role="button" @click="show(comments)">详情</a>
+                        <a href="" class="btn btn-default" role="button" onclick="toShare()">分享</a>
+                        <button @click="like(comments.id)">👍</button>
+                        <span>{{comments.like}}</span>
+                        <button @click="unlike(comments.id)">👎</button>
+                        <span>{{comments.unLike}}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--    引入jQuery-->
+<script type="text/javascript" src="static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var vue = new Vue({
+            el: "#comments_body",
+            data: {
+                commentsList:[]
+            },
+            methods: {
+                getComments: function () {
+                    $.get(
+                        "getAllCommentsWithUser",
+                        function (result) {
+                            console.log(result);
+                            var msg = result.extend.commentsWithUser;
+                            vue.commentsList = msg;
+                        }
+                    )
+                },
+                who: function (name) {
+                    $.post(
+                        "toWho",
+                        "nickName="+name,
+                        function (result) {
+                            console.log(result);
+                            location.href="u/v1/topic/who.jsp";
+                        }
+                    )
+                },
+                show: function (comments) {
+                    $.post(
+                        "toShowDetails",
+                        "id="+comments.id,
+                        function (result) {
+                            location.href="u/v1/topic/show.jsp";
+                        }
+                    )
+                },
+                like: function (id) {
+                    $.post(
+                        "like",
+                        "id="+id,
+                        function (result) {
+                            location.reload();
+                        }
+                    )
+                }
+            },
+            mounted: function () {
+                this.getComments();
+            }
+        });
+    })
+</script>
+<script type="text/javascript">
+    function searchDyType() {
+        var val = $("#search_input").val();
+        $.post(
+            "searchDetails",
+            "type="+val,
+            function (result) {
+                console.log(result);
+                location.href="u/v1/topic/searchDetails.jsp";
+            }
+        )
+    }
+</script>
+
+</body>
+</html>
